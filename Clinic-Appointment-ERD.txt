@@ -1,0 +1,113 @@
+
+// PATIENTS
+
+patients [icon: user, color: blue] {
+  patient_id int pk
+  name string
+  phone string
+  email string
+  gender string
+  date_of_birth date
+  address string
+  created_at timestamp
+}
+
+
+// SPECIALTIES
+
+specialties [icon: activity, color: purple] {
+  specialty_id int pk
+  specialty_name string
+}
+
+// DOCTORS
+
+doctors [icon: stethoscope, color: purple] {
+  doctor_id int pk
+  name string
+  phone string
+  email string
+  specialty_id int
+}
+
+// APPOINTMENTS
+appointments [icon: calendar, color: green] {
+  appointment_id int pk
+  patient_id int
+  doctor_id int
+  appointment_date timestamp
+  status string
+  reason string
+}
+
+// CONSULTATIONS / VISITS
+
+consultations [icon: clipboard, color: green] {
+  consultation_id int pk
+  appointment_id int
+  patient_id int
+  doctor_id int
+  diagnosis string
+  notes string
+  consultation_date timestamp
+}
+
+// TEST TYPES
+
+tests [icon: flask, color: orange] {
+  test_id int pk
+  test_name string
+  description string
+  price decimal
+}
+
+// PRESCRIBED TESTS
+consultation_tests [icon: list, color: orange] {
+  consultation_test_id int pk
+  consultation_id int
+  test_id int
+  status string
+}
+
+// REPORTS
+
+reports [icon: file-text, color: red] {
+  report_id int pk
+  consultation_test_id int
+  report_url string
+  result_summary string
+  generated_at timestamp
+}
+
+// PAYMENTS
+
+payments [icon: credit-card, color: yellow] {
+  payment_id int pk
+  patient_id int
+  appointment_id int
+  amount decimal
+  payment_status string
+  payment_method string
+  paid_at timestamp
+}
+
+
+// RELATIONSHIPS
+
+
+specialties.specialty_id > doctors.specialty_id
+
+patients.patient_id > appointments.patient_id
+doctors.doctor_id > appointments.doctor_id
+
+appointments.appointment_id > consultations.appointment_id
+patients.patient_id > consultations.patient_id
+doctors.doctor_id > consultations.doctor_id
+
+consultations.consultation_id > consultation_tests.consultation_id
+tests.test_id > consultation_tests.test_id
+
+consultation_tests.consultation_test_id > reports.consultation_test_id
+
+patients.patient_id > payments.patient_id
+appointments.appointment_id > payments.appointment_id
